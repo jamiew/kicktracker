@@ -2,10 +2,23 @@ h2. Kicktracker
 
 Keep tabs on how your Kickstarter project is performing!
 
-Run this in a cronjob every day or so. It will dump the relevant stats to a .yml file
+Run this in a cronjob every day or so. It will dump your stats to a .yml file
+
+
+h2. Usage 
+
+1. Edit kicktracker.rb and put in your Kickstarter project URL
+2. Run the script: <code>ruby kicktracker.rb</code>
+3. Parse results.yml and make a graph of how fast you got funded yo!
+
+
+h2. Dependencies
+
+$ gem install mechanize
 
 
 h2. About
 
 Distributed under an MIT License
-Copyfree 2010 (c) Jamie Dubs <http://jamiedub.com>
+Copyfree 2010 (c) Jamie Wilkinson <http://jamiedubs.com>
+Free Art & Technology (FAT) Lab <http://fffff.at>
