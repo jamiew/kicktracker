@@ -7,7 +7,6 @@ require 'pp'
 # URL to your Kickstarter project
 url = "http://www.kickstarter.com/projects/571943958/tempt1-and-eyewriter-art-by-eyes"
 
-
 filename = 'results.yml'
 storage = ( File.exists?(filename) ? YAML.load(File.open(filename, 'r')) : [] )
 
@@ -26,7 +25,9 @@ totals = {
   :raised => counts[1][0].gsub(',','').gsub('$','').to_i, 
   :goal => counts[1][1].match(/of (.*) goal/)[1].gsub('$','').gsub(',','').to_i,
   :days_left => counts[2][0].to_i
-  }
+}
+
+puts url
 pp totals
 storage << totals
 
