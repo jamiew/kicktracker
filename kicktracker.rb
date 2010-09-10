@@ -12,7 +12,7 @@ filename = 'results.yml'
 storage = ( File.exists?(filename) ? YAML.load(File.open(filename, 'r')) : [] )
 
 agent = Mechanize.new
-agent.user_agent = "Kicktracker 0.1 by jamiew <http://jamiedubs.com>"
+agent.user_agent = "Kicktracker <http://github.com/jamiew/kicktracker>"
 page = agent.get(url)
 
 money = (page/'#moneyraised')
