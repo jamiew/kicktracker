@@ -1,4 +1,4 @@
-h2. Kicktracker
+h1. Kicktracker
 
 Keep tabs on how your Kickstarter project is performing!
 
