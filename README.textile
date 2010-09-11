@@ -6,13 +6,14 @@ Run this in a cronjob every day or so. It will dump your stats to a .yml file
 
 Output looks like this:
 
-pre.
+<pre>
 http://www.kickstarter.com/projects/571943958/tempt1-and-eyewriter-art-by-eyes
 {:goal=>15000,
  :days_left=>38,
  :time=>"2010-09-10T16:32:20-07:00",
  :backers=>104,
  :raised=>5108}
+</pre>
 
 h2. Usage 
 
