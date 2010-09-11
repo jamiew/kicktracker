@@ -7,7 +7,7 @@ require 'pp'
 # URL to your Kickstarter project
 url = "http://www.kickstarter.com/projects/571943958/tempt1-and-eyewriter-art-by-eyes"
 
-filename = 'results.yml'
+filename = File.dirname(__FILE__)+'/results.yml'
 storage = ( File.exists?(filename) ? YAML.load(File.open(filename, 'r')) : [] )
 
 agent = Mechanize.new
