@@ -11,7 +11,12 @@ config = YAML.load(File.open(dirname+'/config.yml').read)
 raise "You must specify a Kickstarter project url in config.yml" if config.nil? || config['url'].empty?
 url = config['url']
 
+# Graph options
 html_filename = dirname+'/output.html'
+width = config['width'] && config['width'] || 750
+height = config['height'] && config['height'] || 400
+
+# Results
 results_filename = dirname+'/results.yml'
 results = ( File.exists?(results_filename) ? YAML.load(File.open(results_filename, 'r')) : [] )
 
@@ -57,8 +62,8 @@ html += <<-HEREDOC
       function drawVisualization() {
         var data = new google.visualization.DataTable();
         data.addColumn('string', 'Date');
-        data.addColumn('number', 'Raised');
         data.addColumn('number', 'Target');
+        data.addColumn('number', 'Raised');
 HEREDOC
 
 last_date = ''
@@ -71,24 +76,28 @@ raised_by_hour.each do |a|
   end
 
   html += "\t\t"
-  html += "data.addRow(['#{label}', #{a[1]}, #{total}]);"
+  html += "data.addRow(['#{label}', #{total}, #{a[1]}]);"
   html += "\n"
 end
 
 html += <<-HEREDOC
         new google.visualization.LineChart(document.getElementById('visualization')).
-            draw(data, {curveType: "function", width: 500, height: 400, vAxis: {maxValue: 10}});
+            draw(data, {
+                curveType: "function",
+                width: #{width}, height: #{height},
+                vAxis: {maxValue: 10, format: '$#,###'}
+            });
       }
       google.setOnLoadCallback(drawVisualization);
     </script>
   </head>
   <body style="font-family: Arial;border: 0 none;">
-    <div id="visualization" style="width: 500px; height: 400px;"></div>
+    <div id="visualization" style="width: #{width}px; height: #{height}px;"></div>
   </body>
 </html>
 HEREDOC
 
-File.open(html_filename, 'w+') {|f| f.write(results.to_yaml) }
+File.open(html_filename, 'w+') {|f| f.write(html) }
 # puts html
 
 
