@@ -44,7 +44,10 @@ results << totals
 
 
 # Regenerate output.html
-raised_by_hour = results.group_by{|x| date = DateTime.parse(x[:time]); date.strftime('%m/%y %H') }.map{|k,v| [k, v[-1][:raised]] }.sort_by{|a| a[0] }
+grouped = results.group_by{|x| date = DateTime.parse(x[:time]); date.strftime('%m/%y %H') }
+pp grouped
+raised_by_hour = grouped.map{|k,v| [k, v[-1][:raised]] }.sort_by{|a| a[0] }
+pp raised_by_hour
 
 total = results[-1][:goal]
 raised = results[-1][:raised]
@@ -75,11 +78,15 @@ HEREDOC
 
 last_date = ''
 raised_by_hour.each do |a|
-  arg = a[0].split(' ')[0].gsub(/^0/,'')
-  if last_date == arg
+  puts a[1]
+  chunks = a[0].split(' ')
+  date = chunks[0].gsub(/^0/,'')
+  if last_date == date
     label = ''
+    time = chunks[1].to_i > 12 ? "#{chunks[1].to_i - 12}pm" : "#{chunks[1].to_i}am"
+    label = time
   else
-    label = last_date = arg
+    last_date = label = date
   end
 
   html += "\t\t"
@@ -92,14 +99,15 @@ html += <<-HEREDOC
             draw(data, {
                 curveType: "function",
                 width: #{width}, height: #{height},
-                vAxis: {maxValue: 10, format: '$#,###'}
+                vAxis: {maxValue: 10, format: '$#,###'},
+                // hAxis: {showTextEvery: 2}
             });
       }
       google.setOnLoadCallback(drawVisualization);
     </script>
     <style type="text/css">
       #wrapper { margin: 0 auto; width: #{width}px; }
-      #info { margin-left: 70px; }
+      .text { margin-left: 70px; }
       a { color: #000; }
       h1#title { font-size: 15pt; margin-bottom: 5px; }
       h2#byline { font-size: 13pt; font-weight: normal; font-style: italic; margin-top: 0; margin-bottom: 20px; }
@@ -109,9 +117,10 @@ html += <<-HEREDOC
   </head>
   <body style="font-family: Arial;border: 0 none;">
     <div id="wrapper">
+
       <div id="visualization" style="width: #{width}px; height: #{height}px;"></div>
 
-      <div id="info">
+      <div class="text" id="info">
         <h1 id="title"><a href="#{url}">#{title}</a></h1>
         <h2 id="byline">#{byline}</h2>
 
