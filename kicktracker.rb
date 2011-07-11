@@ -44,8 +44,7 @@ results << totals
 
 
 # Regenerate output.html
-grouped = results.group_by{|x| date = DateTime.parse(x[:time]); date.strftime('%m/%y %H') }
-pp grouped
+grouped = results.group_by{|x| DateTime.parse(x[:time]).strftime('%D %H') }
 raised_by_hour = grouped.map{|k,v| [k, v[-1][:raised]] }.sort_by{|a| a[0] }
 pp raised_by_hour
 
@@ -76,17 +75,18 @@ html = <<-HEREDOC
         data.addColumn('number', 'Raised');
 HEREDOC
 
-last_date = ''
+last_date = nil
 raised_by_hour.each do |a|
-  puts a[1]
+
   chunks = a[0].split(' ')
   date = chunks[0].gsub(/^0/,'')
+
   if last_date == date
-    label = ''
     time = chunks[1].to_i > 12 ? "#{chunks[1].to_i - 12}pm" : "#{chunks[1].to_i}am"
     label = time
   else
-    last_date = label = date
+    last_date = date
+    label = date
   end
 
   html += "\t\t"
